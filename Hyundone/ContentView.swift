@@ -103,12 +103,23 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
-                        Button("Next step") {
-                            nextStep()
+                        Button {
+                            prevStep()
+                        } label: {
+                            Label("Previous step", systemImage: "arrowshape.turn.up.left")
                         }
+                        Button {
+                            nextStep()
+                        } label: {
+                            Label("Next step", systemImage: "arrowshape.turn.up.right")
+                        }
+                        
                         Divider()
-                        Button("Reset progress", role: .destructive) {
+                        
+                        Button(role: .destructive) {
                             progress = .suspension
+                        } label: {
+                            Label("Reset progress", systemImage: "arrow.clockwise.circle")
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -164,6 +175,29 @@ struct ContentView: View {
             progress = .readyForCollection
         case .readyForCollection:
             break
+        }
+    }
+    
+    func prevStep() {
+        switch progress {
+        case .suspension:
+            break
+        case .suspensionFrame:
+            progress = .suspension
+        case .suspensionFrameDoors:
+            progress = .suspensionFrame
+        case .suspensionFrameDoorsWindshield:
+            progress = .suspensionFrameDoors
+        case .suspensionFrameDoorsWindshieldWheels:
+            progress = .suspensionFrameDoorsWindshield
+        case .qc:
+            progress = .suspensionFrameDoorsWindshieldWheels
+        case .testing:
+            progress = .qc
+        case .passedAllTests:
+            progress = .testing
+        case .readyForCollection:
+            progress = .passedAllTests
         }
     }
 }
